@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>List of users (CRUD) SPRING BOOT APP</h1>
+<table border="2">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>surename</th>
+        <th>address</th>
+        <th>Edit</th>
+        <th>Delete</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">id</td>
+        <td th:text="${user.name}">name</td>
+        <td th:text="${user.sureName}">surename</td>
+        <td th:text="${user.address}">address</td>
+        <td><a th:href="@{/users/deleteUser(userId=${user.id})}">Delete</a></td>
+        <td><a th:href="@{/users(id=${user.id})}">Edit</a></td>
+    </tr>
+    </tbody>
+</table>
+<hr/>
+<div>
+
+    <h3>Add New User</h3>
+    <hr/>
+
+    <form th:action="@{/saveUser}" th:object="${user}" method="POST">
+
+        <input type="text" th:field="*{name}"  placeholder="Enter name" />
+
+        <input type="text" th:field="*{sureName}"  placeholder="Enter surename" />
+
+        <input type="text" th:field="*{address}" placeholder="Enter address" />
+
+        <button type="submit">Save</button>
+        <input type="hidden" th:field="*{id}" />
+
+    </form>
+    <hr/>
+</div>
+
+</body>
+</html>
