@@ -13,7 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -31,14 +34,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/custom-login", "/index").permitAll() // Публичные ресурсы
-                .antMatchers("/user/**").hasRole("USER") // Доступ для пользователей с ролью USER
-                .antMatchers("/users/**").hasRole("ADMIN") // Доступ для пользователей с ролью ADMIN
+                .antMatchers("/","/customlogin", "/index").permitAll() // Публичные ресурсы
+                .antMatchers("/user/**").hasAnyAuthority("USER") // Доступ для пользователей с ролью USER
+                .antMatchers("/admin/**").hasAnyAuthority("ADMIN") // Доступ для пользователей с ролью ADMIN
+                //.antMatchers("/admin/saveuser").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 .and()
                 .formLogin()
 //                .successHandler(successUserHandler)
-                .loginPage("/custom-login") // URL страницы входа
+                .loginPage("/customlogin") // URL страницы входа
                 .defaultSuccessUrl("/user") // URL страницы после успешной аутентификации
                 .permitAll()
                 .and()
@@ -74,6 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
         return daoAuthenticationProvider;
     }
+
 
     @Override
     @Bean

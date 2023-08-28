@@ -5,6 +5,10 @@
     <title>Title</title>
 </head>
 <body>
+<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+<form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+    <input hidden type="submit" value="Sign Out"/>
+</form>
 <h1>List of users (CRUD) SPRING BOOT APP</h1>
 <table border="2">
     <thead>
@@ -13,6 +17,8 @@
         <th>name</th>
         <th>surename</th>
         <th>address</th>
+        <th>user name</th>
+        <th>password</th>
         <th>Edit</th>
         <th>Delete</th>
 
@@ -24,8 +30,10 @@
         <td th:text="${user.name}">name</td>
         <td th:text="${user.sureName}">surename</td>
         <td th:text="${user.address}">address</td>
-        <td><a th:href="@{/users/deleteUser(userId=${user.id})}">Delete</a></td>
-        <td><a th:href="@{/users(id=${user.id})}">Edit</a></td>
+        <td th:text="${user.userName}">userName</td>
+        <td th:text="${user.password}">password</td>
+        <td><a th:href="@{/admin/deleteUser(userId=${user.id})}">Delete</a></td>
+        <td><a th:href="@{/admin(id=${user.id})}">Edit</a></td>
     </tr>
     </tbody>
 </table>
@@ -35,13 +43,15 @@
     <h3>Add New User</h3>
     <hr/>
 
-    <form th:action="@{/saveUser}" th:object="${user}" method="POST">
+    <form th:action="@{/admin/saveUser}" th:object="${user}" method="POST">
 
         <input type="text" th:field="*{name}"  placeholder="Enter name" />
 
         <input type="text" th:field="*{sureName}"  placeholder="Enter surename" />
 
         <input type="text" th:field="*{address}" placeholder="Enter address" />
+        <input type="text" th:field="*{userName}"  placeholder="Enter user name" />
+        <input type="text" th:field="*{password}"  placeholder="Enter user password" />
 
         <button type="submit">Save</button>
         <input type="hidden" th:field="*{id}" />

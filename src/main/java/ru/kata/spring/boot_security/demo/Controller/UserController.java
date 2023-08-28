@@ -30,19 +30,25 @@ public class UserController {
         return "admin";
     }
 
-    @GetMapping("/deleteUser")
+    @GetMapping("/admin/deleteUser")
     public String deleteEmployee(@RequestParam Long userId) {
         userService.deleteUser(userId);
         return "redirect:/admin";
     }
 
-    @PostMapping("/users/saveUser")
+    @GetMapping("/user")
+    public String userPage() {
+        return "user";
+    }
+
+
+    @PostMapping("/admin/saveUser")
     public String saveUser(@ModelAttribute User user) {
         if (user.getId() == null) {
             userService.addUser(user);
         } else {
             userService.updateUser(user);
         }
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }

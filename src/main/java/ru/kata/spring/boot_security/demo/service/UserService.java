@@ -51,19 +51,23 @@ public class UserService implements UserDetailsService {
     }
 
 
+    @Transactional
     public List<User> getUserList() {
         return repo.findAll();
     }
 
+    @Transactional
     public void deleteUser(Long userId) {
         repo.deleteById(userId);
     }
 
+    @Transactional
     public void addUser(User user) {
         repo.save(user);
     }
 
+    @Transactional
     public void updateUser(User user) {
-        repo.save(user);
+        repo.merge(user);
     }
 }
