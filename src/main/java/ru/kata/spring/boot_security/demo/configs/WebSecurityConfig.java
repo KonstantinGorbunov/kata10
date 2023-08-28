@@ -8,15 +8,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -24,10 +17,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
     private final UserService userService;
 
+    private final SuccessUserHandler authenticationSuccessHandler;
+
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService, SuccessUserHandler authenticationSuccessHandler) {
         this.successUserHandler = successUserHandler;
         this.userService = userService;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
 
     @Override
@@ -43,7 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
 //                .successHandler(successUserHandler)
                 .loginPage("/customlogin") // URL страницы входа
-                .defaultSuccessUrl("/user") // URL страницы после успешной аутентификации
+                //.defaultSuccessUrl("/user") // URL страницы после успешной аутентификации
+                .successHandler(authenticationSuccessHandler)
                 .permitAll()
                 .and()
                 .logout()
