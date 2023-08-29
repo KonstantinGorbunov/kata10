@@ -33,7 +33,7 @@
         <td th:text="${user.userName}">userName</td>
         <td th:text="${user.password}">password</td>
         <td><a th:href="@{/admin/deleteUser(userId=${user.id})}">Delete</a></td>
-        <td><a th:href="@{/admin(id=${user.id})}">Edit</a></td>
+        <td><a th:href="@{/admin/(id=${user.id})}">Edit</a></td>
     </tr>
     </tbody>
 </table>

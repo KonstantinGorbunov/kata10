@@ -2,30 +2,32 @@ package ru.kata.spring.boot_security.demo.Repositories;
 
 
 import org.hibernate.NonUniqueResultException;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Optional;
 
 
 @Repository
-public class RoleRepository {
+public class RoleDaoImpl implements RoleDao {
     @PersistenceContext
     EntityManager entityManager;
-    public Role findRoleByName(String name) {
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Role> findRoleByName(String name) {
         try {
             TypedQuery<Role> tq = entityManager.createQuery("from Role WHERE name=:name", Role.class);
-            Role result = tq.setParameter("name", name).getSingleResult();
-            return  result;
+            return Optional.of(tq.setParameter("name", name).getSingleResult());
         } catch(NoResultException noresult) {
-            return null;
+            return Optional.ofNullable(null);
         } catch(NonUniqueResultException notUnique) {
-            return null;
+            return Optional.ofNullable(null);
         }
 
     }
