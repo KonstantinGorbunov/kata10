@@ -5,32 +5,39 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @Autowired
-    public AdminController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+    public AdminController(UserService userServiceImpl) {
+        this.userService = userServiceImpl;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/loadUser/{id}", method = RequestMethod.GET)
+    public User loadEntity(@PathVariable("id") Long id) {
+        return userService.findUserById(id);
+    }
+
 
     @GetMapping("/")
     public String printUsers(ModelMap modelMap, @RequestParam(required = false) final Long id) {
-        modelMap.addAttribute("users", userServiceImpl.getUserList());
+        modelMap.addAttribute("users", userService.getUserList());
         if (id == null) {
             modelMap.addAttribute("user", new User());
         } else {
-            modelMap.addAttribute("user", userServiceImpl.findUserById(id));
+            modelMap.addAttribute("user", userService.findUserById(id));
         }
         return "admin";
     }
 
     @GetMapping("/deleteUser")
     public String deleteEmployee(@RequestParam Long userId) {
-        userServiceImpl.deleteUser(userId);
+        userService.deleteUser(userId);
         return "redirect:";
     }
 
@@ -39,9 +46,9 @@ public class AdminController {
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute User user) {
         if (user.getId() == null) {
-            userServiceImpl.addUser(user);
+            userService.addUser(user);
         } else {
-            userServiceImpl.updateUser(user);
+            userService.updateUser(user);
         }
         return "redirect:";
     }

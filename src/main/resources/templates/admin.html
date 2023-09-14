@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script th:src="@{/js/ajax.js}"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script th:src="@{/js/user.js}"></script
-    ><title>User list (Admin) </title>
+    <script th:src="@{/js/user.js}"></script>
+    <script th:src="@{/js/ajax.js}"></script>
+    <title>User list (Admin) </title>
     <script>
         $(document).ready(function ($) {
             $("#edit-form").submit(function (event) {
@@ -35,83 +38,83 @@
         <a href="/user">User</a>
     </div>
     <div class="main-content">
-        <div class="content">
-            <h1>Admin panel</h1>
-            <div class="tabs">
-                <input type="radio" name="tab-btn" id="tab-btn-1" value="" checked>
-                <label for="tab-btn-1">User table</label>
-                <input type="radio" name="tab-btn" id="tab-btn-2" value="">
-                <label for="tab-btn-2">New User</label>
+        <h1>Admin panel</h1>
 
-                <div id="content-1">
-                    <div class="content-header">
-                        <h4>All Users</h4>
-                    </div>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>id</th>
-                            <th>name</th>
-                            <th>surename</th>
-                            <th>address</th>
-                            <th>user name</th>
-                            <th>password</th>
-                            <th>roles</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="user : ${users}">
-                            <td th:text="${user.id}">id</td>
-                            <td th:text="${user.name}">name</td>
-                            <td th:text="${user.sureName}">surename</td>
-                            <td th:text="${user.address}">address</td>
-                            <td th:text="${user.userName}">userName</td>
-                            <td th:text="${user.password}">password</td>
-                            <td>
-                                <ul>
-                                    <li th:each="role : ${user.getRoles()}" th:text="${role.getName()}"></li>
-                                </ul>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary" th:attr="data-toggle='modal', data-target='#edituser' + ${user.id}">Edit</button>
-                            </td>
-                            <td><button type="button" class="button-delete" th:attr="data-toggle='modal', data-target='#deleteModal' + ${user.getId()}">Delete</button></td>
+        <ul class="nav nav-tabs" id="userlist" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="userlist-tab" data-toggle="tab" href="#users" role="tab" aria-controls="userlist" aria-selected="true">Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="newuser-tab" data-toggle="tab" href="#newuser" role="tab" aria-controls="newuser" aria-selected="false">New user</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="userlist">
+               <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>surename</th>
+                    <th>address</th>
+                    <th>user name</th>
+                    <th>password</th>
+                    <th>roles</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}">id</td>
+                    <td th:text="${user.name}">name</td>
+                    <td th:text="${user.sureName}">surename</td>
+                    <td th:text="${user.address}">address</td>
+                    <td th:text="${user.userName}">userName</td>
+                    <td th:text="${user.password}">password</td>
+                    <td>
+                        <ul>
+                            <li th:each="role : ${user.getRoles()}" th:text="${role.getName()}"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary"  role="button"  data-toggle="modal" data-target="#edituser" th:onclick="'showEditModal(' + ${user.id} + ')'">Edit</a>
+                    </td>
+                    <td><button type="button" class="btn btn-danger" onclick="clear2()">Delete</button></td>
 
-                        </tr>
+                </tr>
 
-                        </tbody>
-                    </table>
-                </div>
-                <div id="content-2">
-                    <form th:action="@{/admin/saveUser}" th:object="${user}" method="POST">
-                        <label class="new-user-label" for="name">Name</label>
-                        <input type="text" id="name" name="name" required><br>
+                </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="newuser" role="tabpanel" aria-labelledby="newuser-tab">
+                <form th:action="@{saveUser}" th:object="${user}" method="POST">
+                    <label class="new-user-label" for="name">Name</label>
+                    <input type="text" id="name" name="name" required><br>
 
-                        <label for="sureName">Sure name</label>
-                        <input type="text" id="sureName" name="sureName" required><br>
+                    <label for="sureName">Sure name</label>
+                    <input type="text" id="sureName" name="sureName" required><br>
 
-                        <label for="address">Adress</label>
-                        <input type="text" id="address" name="address" required><br>
+                    <label for="address">Adress</label>
+                    <input type="text" id="address" name="address" required><br>
 
-                        <label for="userName">User name</label>
-                        <input type="text" id="userName" name="userName" required><br>
+                    <label for="userName">User name</label>
+                    <input type="text" id="userName" name="userName" required><br>
 
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required><br>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required><br>
 
-                        <label for="role">Role</label>
-                        <select id="role" name="role">
-                            <option value="USER">USER</option>
-                            <option value="ADMIN">ADMIN</option>
-                        </select><br>
+                    <label for="role">Role</label>
+                    <select id="role" name="role">
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select><br>
 
-                        <button class="button-submit" type="submit">Submit</button>
-                    </form>
-                </div>
+                    <button class="button-submit" type="submit">Submit</button>
+                </form>
             </div>
         </div>
+
     </div>
 </div>
 <!-- Modal Window AJAX-->
@@ -125,7 +128,7 @@
                 <h4 class="modal-title">Edit user</h4>
             </div>
             <div class="modal-body">
-                <form id="edit-form" role="form" th:method="post" th:action="@{/admin/saveUser}"
+                <form id="edit-form" asp-action="Edit" role="form" th:method="post" th:action="saveUser"
                       th:object="${user}">
                     <input id="update-id" type="hidden" th:field="*{id}" th:value="${user.id}"/>
                     <fieldset class="form-group">
@@ -174,7 +177,7 @@
                         </select><br>
                     </fieldset>
                     <div class="form-group">
-                        <button class="btn btn-success" type="submit">Save</button>
+                        <button class="btn btn-success" type="submit" form="edit-form">Save</button>
                     </div>
                 </form>
             </div>

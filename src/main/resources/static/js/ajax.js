@@ -1,12 +1,14 @@
 
 // Begin Something modal population and submit functions
 var url = "/admin/";
-var editModalTarget = url + "loadEntity/";
+var editModalTarget = url + "loadUser/";
 var tableTarget = url + "loadUserTable/";
 
 // Build the url for the Ajax request for Something.
 function showEditModal(index) {
+    //alert("showEditModal");
     var editUrl = editModalTarget + index;
+    //alert(editUrl)
     loadEntity(editUrl);
 }
 
@@ -23,12 +25,12 @@ function loadEntity(url) {
 
 // Assign the data values to the modal form.
 function populateModal(data) {
-    $('#update-id').val(data.id);
-    $('#update-name').val(data.name);
-    $('#update-sureName').val(data.sureName);
-    $('#update-userName').val(data.userName);
-    $('#update-address').val(data.address);
-    $('#update-password').val(data.password);
+    $('#edit_id').val(data.id);
+    $('#edit_firstname').val(data.name);
+    $('#edit_sureName').val(data.sureName);
+    $('#edit_userName').val(data.userName);
+    $('#edit_address').val(data.address);
+    $('#edit_password').val(data.password);
 }
 
 function clearModal() {
@@ -47,12 +49,12 @@ function clearAndCloseModal(name) {
 
 // POST the edits to Something to the server.
 function postEdit() {
-    var something = $('#edit-form').serialize();
-    var editUrl = url + 'update';
-    $.post(editUrl, User, function (data) {
+    var user = $('#edit-form').serialize();
+    var editUrl = 'saveuser';
+    $.post(editUrl, user, function (data) {
         updateTable(data);
     });
-    clearAndCloseModal('#umodal');
+    clearAndCloseModal('#edituser');
 }
 
 function deleteEntity(entity) {
